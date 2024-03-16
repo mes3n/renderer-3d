@@ -36,8 +36,8 @@ int init_camera(Camera *camera) {
     double viewport_width =
         viewport_height * ((double)image_width / (double)image_height);
 
-    Vec3 w = vec3_normal(vec3_sub(camera->origin, look_at));
-    Vec3 u = vec3_normal(vec3_cross(vup, w));
+    Vec3 w = vec3_unit(vec3_sub(camera->origin, look_at));
+    Vec3 u = vec3_unit(vec3_cross(vup, w));
     Vec3 v = vec3_cross(w, u);
 
     Vec3 viewport_u = vec3_scale(u, viewport_width);
@@ -66,7 +66,7 @@ int init_camera(Camera *camera) {
     return true;
 }
 
-const Vec3 light = (Vec3){0.0, 20.0, 11.0};
+const Vec3 light = {0.0, 20.0, 11.0};
 
 Vec3 ray_color(const Ray *ray, const int depth, const Hittables *world) {
     if (depth <= 0) {
@@ -87,7 +87,7 @@ Vec3 ray_color(const Ray *ray, const int depth, const Hittables *world) {
         }
         return attenuation;
     }
-    Vec3 unit = vec3_normal(ray->direction);
+    Vec3 unit = vec3_unit(ray->direction);
     double s = 0.5 * (unit.y + 1.0);
     return vec3_add(vec3_scale(vec3_from(1.0, 1.0, 1.0), 1.0 - s),
                     vec3_scale(vec3_from(0.5, 0.7, 1.0), s));
@@ -142,4 +142,5 @@ void render(const Camera *camera, const Hittables *world) {
             set_pixel(x, y, rgb);
         }
     }
+    update_render();
 }

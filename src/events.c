@@ -29,7 +29,7 @@ void poll_events() {
 }
 
 double tick() {
-    static unsigned long ticks_ms = 0; 
+    static unsigned long ticks_ms = 0;
     unsigned long now = SDL_GetTicks64();
     unsigned long result = now - ticks_ms;
     ticks_ms = now;

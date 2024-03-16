@@ -2,9 +2,12 @@
 #include "ray.h"
 #include "vec3.h"
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 bool lambertian_scatter(const Lambertian *lambertian, const Ray *ray,
                         const HitRecord *hr, Ray *scattered,
                         Vec3 *attenuation) {
+#pragma GCC diagnostic pop
     *scattered = (Ray){0};
     *attenuation = lambertian->albedo;
 
@@ -13,7 +16,7 @@ bool lambertian_scatter(const Lambertian *lambertian, const Ray *ray,
 
 bool metal_scatter(const Metal *metal, const Ray *ray, const HitRecord *hr,
                    Ray *scattered, Vec3 *attenuation) {
-    Vec3 direction = vec3_reflect(vec3_normal(ray->direction), hr->normal);
+    Vec3 direction = vec3_reflect(vec3_unit(ray->direction), hr->normal);
 
     *scattered = ray_from(hr->point, direction);
     *attenuation = metal->albedo;
@@ -34,7 +37,7 @@ bool dielectric_scatter(const Dielectric *dielectric, const Ray *ray,
     double refraction_ratio = hr->front_face ? (1.0 / dielectric->refraction)
                                              : dielectric->refraction;
 
-    Vec3 unit_direction = vec3_normal(ray->direction);
+    Vec3 unit_direction = vec3_unit(ray->direction);
     double cos_theta =
         fmin(vec3_dot(vec3_scale(unit_direction, -1.0), hr->normal), 1.0);
     double sin_theta = sqrt(1.0 - cos_theta * cos_theta);

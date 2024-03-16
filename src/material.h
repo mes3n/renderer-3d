@@ -24,7 +24,6 @@ bool lambertian_scatter(const Lambertian *lambertian, const Ray *ray,
 typedef struct {
     ScatterFn scatter;
     Vec3 albedo;
-    double fuzz;
 } Metal;
 
 bool metal_scatter(const Metal *metal, const Ray *ray, const HitRecord *hr,

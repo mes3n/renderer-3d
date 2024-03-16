@@ -1,15 +1,8 @@
 #include "sphere.h"
-
-#include <math.h>
-
-void set_face_normal(HitRecord *hit_record, const Ray *ray, const Vec3 out_n) {
-    hit_record->front_face = vec3_dot(ray->direction, out_n) < 0;
-    hit_record->normal =
-        hit_record->front_face ? out_n : vec3_scale(out_n, -1.0);
-}
+#include "hittables.h"
 
 bool sphere_hit(const Sphere *sphere, const Ray *ray, const Interval *rayt,
-                HitRecord *hit_record, Material **material) {
+                HitRecord *hit_record) {
     Vec3 oc = vec3_sub(ray->origin, sphere->center);
     double a = vec3_length_squared(ray->direction);
     double b_2 = vec3_dot(oc, ray->direction);
@@ -31,11 +24,18 @@ bool sphere_hit(const Sphere *sphere, const Ray *ray, const Interval *rayt,
     hit_record->point = ray_at(ray, hit_record->t);
     hit_record->normal = vec3_scale(vec3_sub(hit_record->point, sphere->center),
                                     1.0 / sphere->radius);
-    *material = sphere->material;
-
     Vec3 out_n = vec3_scale(vec3_sub(hit_record->point, sphere->center),
                             1.0 / sphere->radius);
     set_face_normal(hit_record, ray, out_n);
 
     return true;
+}
+
+Sphere sphere_from(const Vec3 center, const double radius, void *material) {
+    Sphere sphere;
+    sphere.material = material;
+    sphere.hit = (ShapeHitFn)sphere_hit;
+    sphere.center = center;
+    sphere.radius = radius;
+    return sphere;
 }

@@ -102,7 +102,7 @@ static inline Vec3 vec3_cross(const Vec3 v, const Vec3 u) {
     };
 }
 
-static inline Vec3 vec3_normal(const Vec3 v) {
+static inline Vec3 vec3_unit(const Vec3 v) {
     return vec3_scale(v, 1.0 / vec3_length(v));
 }
 

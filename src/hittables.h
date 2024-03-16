@@ -9,11 +9,15 @@
 #include <stdbool.h>
 
 typedef bool (*ShapeHitFn)(const void *, const Ray *, const Interval *,
-                           HitRecord *, Material **);
+                           HitRecord *);
+
+typedef struct {
+    Material *material;
+    ShapeHitFn hit;
+} Shape;
 
 typedef struct Hittables {
-    const void *shape;
-    ShapeHitFn shape_hit;
+    const Shape *shape;
 
     struct Hittables *next;
 } Hittables;
@@ -21,11 +25,10 @@ typedef struct Hittables {
 bool hit_any(const Hittables *hittables, const Ray *ray, const Interval *rayt,
              HitRecord *hit_record, Material **material);
 
-int hittables_add(Hittables **hittables, const void *shape,
-                  ShapeHitFn shape_hit);
+int hittables_add(Hittables **hittables, const Shape *shape);
+int hittables_remove(Hittables **hittables, const Shape *shape);
 
 int hittables_len(Hittables *ht);
-
 void hittables_clear(Hittables *hittables);
 
 #endif // HITTABLES_H
