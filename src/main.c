@@ -52,16 +52,14 @@ int main() {
         return 1;
     }
 
+    init_events();
+
     double dt;
     while (!should_close()) {
         dt = tick();
 
-        poll_events();
+        poll_events(&camera, dt);
         render(&camera, world);
-
-        camera.origin.x += 1.0 * dt;
-        camera.origin.y += 1.0 * dt;
-        camera.origin.z += 4.0 * dt;
 
         fflush(stdout);
         printf("\rFPS: %2.2f", 1.0 / dt);

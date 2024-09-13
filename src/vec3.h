@@ -23,6 +23,10 @@ static inline Vec3 vec3_from(const double x, const double y, const double z) {
     return (Vec3){.x = x, .y = y, .z = z};
 }
 
+static inline Vec3 vec3_from_rotation(const double yaw, const double pitch) {
+    return vec3_from(sin(yaw) * cos(pitch), sin(pitch), cos(yaw) * cos(pitch));
+}
+
 static inline Vec3 vec3_random() {
     return (Vec3){
         .x = random_double(),
